@@ -23,11 +23,11 @@ const Index:React.FC = p=>{
         <Menu.Item key="3">nav 3</Menu.Item>
       </Menu>
     </Header>
-    <Content style={{ padding: '0 50px' }}>
-      <Breadcrumb style={{ margin: '16px 0' }}>
-        {path}
-      </Breadcrumb>
-      <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+    {/* <Breadcrumb style={{ margin: '16px 0', padding: '0 40px' }}>
+      {path}
+    </Breadcrumb> */}
+    <Content style={{ }}>
+      <div style={{ background: '#fff', padding: '20px 20px 0 0', minHeight: 280 }}>
         {p.children}
       </div>
     </Content>

@@ -20,8 +20,10 @@
     "body-parser": "^1.19.0",
     "dva": "^2.6.0-beta.6",
     "express": "^4.17.1",
+    "memoize-one": "^5.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-gauge-chart": "^0.2.5",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

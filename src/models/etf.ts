@@ -1,35 +1,43 @@
 import { EnhancedModel as Model, Action } from 'dva';
 import { createAction } from '@/util/createaction';
-import { fundNetValue } from '@/services/api';
+import { etfBasic, etfInfo } from '@/services/api';
 interface Item {
   code: string;
 }
 
+interface Info{
+  capital: number
+  managementFee: number
+  custodianFee: number
+  marketingfee: number
+}
+
+interface HisData {
+  date: string;
+  close: number;
+  netValue: number;
+  premium: number;
+}
+
 interface State {
-  current?: Item;
   list: Partial<Item>[];
-  type: 'netValue',
-  data?: Array<
-    {
-      date: string;
-      etf: number;
-      fund: number;
-      ratio: number;
-    }
-  >
+  type: 'basic'|'info',
+  data: Array<HisData>,
+  info?: Info
 }
 export const namespace = 'etf';
 export const actions = {
   set: (state: Partial<State>) => createAction(`${namespace}/set`, state),
-  getNetValue: (code: string) => createAction(`${namespace}/getNetValue`, code),
+  getBasic: (code: string, type:'3yrs'|'5yrs') => createAction(`${namespace}/getBasic`, {code, type}),
+  getInfo: (code: string) => createAction(`${namespace}/getInfo`, {code}),
 };
 const mm: Model<State> = {
   namespace,
   state: {
-    type: 'netValue',
-    current: void 0,
+    type: 'basic',
     list: [],
-    data: void 0
+    data: [],
+    info: void 0,
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -42,11 +50,16 @@ const mm: Model<State> = {
     },
   },
   effects: {
-    *getNetValue({ payload }, { call, put }) {
-      yield put(actions.set({type: 'netValue'}));
-      const res = yield call(fundNetValue, payload);
+    *getBasic({ payload }, { call, put }) {
+      const res = yield call(etfBasic, payload.code, payload.type);
       if (res.result){
         yield put(actions.set({data: res.result}));
+      }
+    },
+    *getInfo({ payload }, { call, put }) {
+      const res = yield call(etfInfo, payload.code);
+      if (res.result){
+        yield put(actions.set({info: res.result}));
       }
     }
   },
