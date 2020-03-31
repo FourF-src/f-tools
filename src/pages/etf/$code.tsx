@@ -6,7 +6,7 @@ import { AppState } from '@/models/type';
 import DataSet from '@antv/data-set';
 import memo from 'memoize-one';
 import F2 from '@antv/f2';
-import { WhiteSpace} from 'antd-mobile';
+import { WhiteSpace } from 'antd-mobile';
 import '@antv/f2/lib/geom/interval';
 
 function mapStateToProps(s: AppState) {
@@ -106,16 +106,17 @@ const Basic: React.FC<Props> = p => {
       tickCount: 5
     });
     chart.axis('date', {
-      label: function label(_, index:number, total:number) {
+      label: function label(_, index: number, total: number) {
         // 只显示每一年的第一天
-        const textCfg:any = {};
+        const textCfg: any = {};
         if (index === 0) {
           textCfg.textAlign = 'left';
         } else if (index === total - 1) {
           textCfg.textAlign = 'right';
         }
         return textCfg;
-      }})
+      }
+    })
 
     chart.tooltip({
       custom: false, // 自定义 tooltip 内容框
@@ -129,20 +130,37 @@ const Basic: React.FC<Props> = p => {
   }, [p.data])
 
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
 
     const chart = new F2.Chart({
       id: 'hist',
       pixelRatio: window.devicePixelRatio
     });
-    console.log(convertHist(p.data))
-    chart.source(convertHist(p.data),{
-      value: {
-      min:-0.5,
-      max:0.5,
-      tickInterval:1
+    chart.source(convertHist(p.data));
+    chart.scale('溢价率', {
+      min: -0.4,
+      max: 0.4,
+      nice: false,
+      // tickInterval: 0.005,
+      tickCount: 3
+    });
+    chart.axis('溢价率', {
+      label: function label(_, index: number, total: number) {
+        // 只显示每一年的第一天
+        const textCfg: any = {};
+        if (index === 0) {
+          textCfg.textAlign = 'left';
+        } else if (index === total - 1) {
+          textCfg.textAlign = 'right';
+        } else if (index === Math.ceil(total/2)) {
+          textCfg.textAlign = 'center';
+        } else{
+          textCfg.display = 'none';
+        }
+        return textCfg;
       }
-      });
+    })
+
     chart.tooltip({
       showItemMarker: false,
     });
@@ -155,10 +173,13 @@ const Basic: React.FC<Props> = p => {
   }, [p.data])
 
   return <div>
-    <canvas id="chart" width="800" height="600" style={{width:'100%'}}></canvas>
+    <h2>{code}</h2>
     <WhiteSpace size="lg" />
-
-    <canvas id="hist" width="800" height="600" style={{width:'100%'}}></canvas>
+    <h3>历史走势</h3>
+    <canvas id="chart" width="800" height="600" style={{ width: '100%' }}></canvas>
+    <WhiteSpace size="lg" />
+    <h3>溢价率</h3>
+    <canvas id="hist" width="800" height="600" style={{ width: '100%' }}></canvas>
 
   </div>
 }

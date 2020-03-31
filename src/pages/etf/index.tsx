@@ -64,7 +64,7 @@ const ETF:React.FC<Props> = p=>{
 
 
     return <div >
-            <div className="sub-title">ETFs</div>
+            <h2>ETFs</h2>
             <SearchBar onChange={val => debounceFn(()=>setKeyWord(val))} />
             <WhiteSpace size="lg" />
             <Table columns={cols} dataSource={filter(keyword, p.list)} scrollWidth={500} ></Table>
