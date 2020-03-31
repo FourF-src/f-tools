@@ -5,7 +5,7 @@ const config: IConfig =  {
   treeShaking: true,
   proxy: {
     "/api": {
-      target: "http://localhost:8001/",
+      target: "http://localhost:9000/",
       changeOrigin: true,
     }  
   },

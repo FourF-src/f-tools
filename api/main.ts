@@ -6,4 +6,6 @@ app.use(bodyParser.json())
 
 app.use('/api/etf', fund);
 
-app.listen(8001)
+app.listen(9000)
+
+console.log('api run at http://localhost:9000')

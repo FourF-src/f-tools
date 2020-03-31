@@ -3,28 +3,11 @@ import { connect } from 'dva';
 import { actions } from '@/models/etf';
 import { PropsRoute } from 'umi';
 import { AppState } from '@/models/type';
-import { Radio, Form, Spin, Menu, Icon, Layout } from 'antd';
-const SubMenu = Menu.SubMenu
-import {
-  G2,
-  Chart,
-  Geom,
-  Axis,
-  Tooltip,
-  Coord,
-  Label,
-  Legend,
-  View,
-  Guide,
-  Shape,
-  Facet,
-  Util
-} from "bizcharts";
 import DataSet from '@antv/data-set';
 import memo from 'memoize-one';
-import GaugeChart from 'react-gauge-chart';
-
-
+import F2 from '@antv/f2';
+import { WhiteSpace} from 'antd-mobile';
+import '@antv/f2/lib/geom/interval';
 
 function mapStateToProps(s: AppState) {
   const { etf, loading } = s;
@@ -105,163 +88,79 @@ const Basic: React.FC<Props> = p => {
     p.getBasic(code, type);
   }, [code, type])
 
-  const cols = {
-    value: {
-      min: 0
-    },
-  };
-  const cols2 = {
-    ratio: {
-      min: -0.1,
-      max: 0.1
-    },
-  };
 
+  React.useEffect(() => {
+    // Step 1: 创建 Chart 对象
+    const chart = new F2.Chart({
+      id: 'chart',
+      pixelRatio: window.devicePixelRatio, // 指定分辨率
+    });
+
+    // Step 2: 载入数据源
+    chart.source(convertLine(p.data));
+    chart.scale('date', {
+      type: 'timeCat',
+      tickCount: 3
+    });
+    chart.scale('close', {
+      tickCount: 5
+    });
+    chart.axis('date', {
+      label: function label(_, index:number, total:number) {
+        // 只显示每一年的第一天
+        const textCfg:any = {};
+        if (index === 0) {
+          textCfg.textAlign = 'left';
+        } else if (index === total - 1) {
+          textCfg.textAlign = 'right';
+        }
+        return textCfg;
+      }})
+
+    chart.tooltip({
+      custom: false, // 自定义 tooltip 内容框
+    });
+    chart.line().position('date*价格').color('key');
+    // Step 4: 渲染图表
+    chart.render();
+    return () => {
+      chart.destroy()
+    }
+  }, [p.data])
+
+
+  React.useEffect(()=>{
+
+    const chart = new F2.Chart({
+      id: 'hist',
+      pixelRatio: window.devicePixelRatio
+    });
+    console.log(convertHist(p.data))
+    chart.source(convertHist(p.data),{
+      value: {
+      min:-0.5,
+      max:0.5,
+      tickInterval:1
+      }
+      });
+    chart.tooltip({
+      showItemMarker: false,
+    });
+    chart.interval().position('溢价率*频数');
+    chart.render();
+    return () => {
+      chart.destroy()
+    }
+
+  }, [p.data])
 
   return <div>
-    <Form>
-      <Form.Item>
-        <Radio.Group value={type} onChange={e => setType(e.target.value)}>
-          <Radio.Button value="3yrs">3 years</Radio.Button>
-          <Radio.Button value="5yrs">5 years</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-    </Form>
-    <Chart height={600} forceFit>
-      <Tooltip
-        crosshairs={{
-          type: "y"
-        }}
-      />
+    <canvas id="chart" width="800" height="600" style={{width:'100%'}}></canvas>
+    <WhiteSpace size="lg" />
 
-      <View start={{ x: 0, y: 0 }} end={{ x: 1, y: 0.55 }} data={convertLine(p.data)} scale={cols}>
-        <Axis name="价格" title />
-        <Geom type="line" position="date*价格" color="key" size={2} />
-      </View>
-      <View start={{ x: 0, y: 0.7 }} data={convertLine(p.data)} scale={cols2}>
-        <Axis name="date" />
-        <Axis name="溢价率" title />·
-        <Geom type="line" position="date*溢价率" size={2} />
-      </View>
-    </Chart>
-    <Chart height={400} width={600} data={convertHist(p.data)} scale={cols2}>
-      <Axis name="频数" title />
-      <Axis name="溢价率" title />
-      <Tooltip inPlot={false} crosshairs={false} />
-      <Geom type="interval" position="溢价率*频数" />
+    <canvas id="hist" width="800" height="600" style={{width:'100%'}}></canvas>
 
-
-    </Chart>
   </div>
 }
 
-const Info: React.FC<Props> = p => {
-  const code = p.location.pathname.split('/').pop();
-
-  React.useEffect(() => {
-    if (!code) {
-      return
-    }
-    p.getInfo(code);
-  }, [code])
-
-  if (!p.info) {
-    return '-';
-  }
-  return <div style={{ display: 'flex', width:900, margin:'auto' }}>
-    <div style={{ flex: '1', textAlign:'center' }}>
-      <GaugeChart id="gauge-management"
-        nrOfLevels={3}
-        percent={p.info.managementFee/0.1}
-        textColor="#000"
-        formatTextValue={(value:number) => value*10 + '%'}
-        colors={['#5BE12C', '#F5CD19', '#EA4228']}
-        style={{ margin:'auto' }}
-      />
-      管理费
-      </div>
-    <div style={{  flex: '1', textAlign:'center' }}>
-      <GaugeChart id="gauge-custodian"
-        nrOfLevels={3}
-        percent={p.info.custodianFee/0.1}
-        formatTextValue={(value:number) => value*10 + '%'}
-        textColor="#000"
-        style={{ margin:'auto' }}
-        colors={['#5BE12C', '#F5CD19', '#EA4228']}
-        />
-      托管费
-      </div>
-    <div style={{  flex: '1', textAlign:'center' }}>
-      <GaugeChart id="gauge-marketing"
-        nrOfLevels={3}
-        percent={p.info.marketingfee/0.1}
-        formatTextValue={(value:number) => value*10 + '%'}
-        textColor="#000"
-        colors={['#5BE12C', '#F5CD19', '#EA4228']}
-        style={{ margin:'auto' }}
-      />
-      销售服务费
-      </div>
-
-  </div>;
-}
-
-const Index: React.FC<Props> = p => {
-  const curr = p.type;
-  const [okey, setOkey] = React.useState<string[]>(['sub1']);
-  // submenu keys of first level
-
-
-  const changeMemu = React.useCallback((openKeys: string[]) => {
-    const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
-
-    const latestOpenKey = openKeys.find(key => okey.indexOf(key) === -1) || '';
-    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      setOkey(openKeys);
-    } else {
-      setOkey(latestOpenKey ? [latestOpenKey] : []);
-    }
-  }, [okey]);
-  const menu = <Menu
-    mode="inline"
-    openKeys={okey}
-    defaultSelectedKeys={[curr]}
-    onClick={(t: any) => p.set({ type: t.key })}
-    onOpenChange={changeMemu}
-    style={{ height: '100%' }}
-  >
-    <SubMenu
-      key="sub1"
-      title={
-        <span>
-          <Icon type="mail" />
-          <span>图表工具</span>
-        </span>
-      }
-    >
-      <Menu.Item key="basic">基本图表</Menu.Item>
-      <Menu.Item key="info">基金详细</Menu.Item>
-    </SubMenu>
-
-  </Menu>
-
-  let content = <div></div>;
-  if (curr === 'basic') {
-    content = <Basic {...p}></Basic>
-  }
-  if (curr === 'info') {
-    content = <Info {...p} />;
-  }
-  return <Spin spinning={p.loading}>
-    <div style={{ display: 'flex' }}>
-      <section style={{ flexBasis: 200, marginRight: 20 }}>
-        {menu}
-      </section>
-      <section style={{ flexGrow: 1 }}>
-        {content}
-      </section>
-    </div>
-  </Spin>
-}
-
-export default connect(mapStateToProps, actions)(Index);
+export default connect(mapStateToProps, actions)(Basic);

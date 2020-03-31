@@ -1,8 +1,9 @@
 import { EnhancedModel as Model, Action } from 'dva';
 import { createAction } from '@/util/createaction';
-import { etfBasic, etfInfo } from '@/services/api';
+import { etfBasic, etfInfo, etfList } from '@/services/api';
 interface Item {
   code: string;
+  name: string;
 }
 
 interface Info{
@@ -30,6 +31,7 @@ export const actions = {
   set: (state: Partial<State>) => createAction(`${namespace}/set`, state),
   getBasic: (code: string, type:'3yrs'|'5yrs') => createAction(`${namespace}/getBasic`, {code, type}),
   getInfo: (code: string) => createAction(`${namespace}/getInfo`, {code}),
+  getList: () => createAction(`${namespace}/getList`),
 };
 const mm: Model<State> = {
   namespace,
@@ -50,7 +52,14 @@ const mm: Model<State> = {
     },
   },
   effects: {
+    *getList({ payload }, { call, put }){
+      const res = yield call(etfList);
+      if (res.result){
+        yield put(actions.set({list: res.result}));
+      }
+    },
     *getBasic({ payload }, { call, put }) {
+      yield put(actions.set({data: []}));
       const res = yield call(etfBasic, payload.code, payload.type);
       if (res.result){
         yield put(actions.set({data: res.result}));

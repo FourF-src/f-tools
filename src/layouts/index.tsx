@@ -1,38 +1,17 @@
 import React from 'react';
 import {NavLink} from 'umi';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import PlaceHolder from './placeholder';
+import { Card, WhiteSpace, WingBlank } from 'antd-mobile';
 
-const { Header, Content, Footer } = Layout;
 
-const Index:React.FC = p=>{
-  const path = location.pathname.split('/').map(el=><Breadcrumb.Item key={el}>{el}</Breadcrumb.Item>)
-  const curr = location.pathname.split('/')[1];
-  return (
-  <Layout className="layout">
-    <Header>
-      <div className="logo" />
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={[curr]}
-        style={{ lineHeight: '64px' }}
-      >
-        <Menu.Item key="/"><NavLink to="/">HOME</NavLink></Menu.Item>
-        <Menu.Item key="etf"><NavLink to="/etf">ETFs</NavLink></Menu.Item>
-        <Menu.Item key="2">nav 2</Menu.Item>
-        <Menu.Item key="3">nav 3</Menu.Item>
-      </Menu>
-    </Header>
-    {/* <Breadcrumb style={{ margin: '16px 0', padding: '0 40px' }}>
-      {path}
-    </Breadcrumb> */}
-    <Content style={{ }}>
-      <div style={{ background: '#fff', padding: '20px 20px 0 0', minHeight: 280 }}>
-        {p.children}
-      </div>
-    </Content>
-    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-  </Layout>
-)}
+const Index:React.FC = p => (
+  <WingBlank size="lg">
+    <div className="title">F-tools</div>
+    <WhiteSpace size="lg" />
+    {p.children}
+    <WhiteSpace size="lg" />
+  </WingBlank>
+);
 
 export default Index
+

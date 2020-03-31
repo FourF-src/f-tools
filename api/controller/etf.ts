@@ -1,6 +1,6 @@
 import {CODE} from '../constant';
 import {Router} from 'express';
-import {basic, info} from '../service/etf';
+import {basic, info, list} from '../service/etf';
 const router = Router();
 router.post('/basic', async (req, res)=>{
     const code = req.body.code;
@@ -19,6 +19,22 @@ router.post('/basic', async (req, res)=>{
     }
 
 })    
+
+router.post('/list', async (_, res)=>{
+    try {
+        const result = await list();
+        res.send({
+            state: CODE.OK,
+            result
+        });        
+    } catch (error) {
+        console.log(error);
+        res.send({
+            state: CODE.FORBID,
+            error
+        })
+    }
+}) 
 
 router.post('/info', async (req, res)=>{
     const code = req.body.code;

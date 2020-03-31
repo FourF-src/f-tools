@@ -4,3 +4,5 @@ declare module 'memoize-one' {
     export default t;
 }
 declare module 'react-gauge-chart';
+declare module '*.less'
+declare module '@antv/f2'

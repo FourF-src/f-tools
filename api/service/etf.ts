@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import cheerio from 'cheerio';
 const sinaFormat = 'YYYY-MM-DD'
 function convertEastMoney(txt:string){
     const dd = Function(`
@@ -23,6 +24,47 @@ function convertinfo(txt:string){
         marketingfee: fee[2]
     }
 }
+
+function convertInvestETF(txt:string){
+    const idx = txt.indexOf('<tbody>');
+    const idx2 = txt.indexOf('</tbody>')+'</tbody>'.length;
+    let r = txt.substring(idx, idx2);
+    const $ = cheerio.load(r)
+    if (!$){
+        return []
+    }
+    const res:any[] = [];
+    $('a').each((_, el)=>{
+        const t = $(el);
+        const href = t.attr('href');
+        let code = '';
+        if (href){
+            const tmp = href.split('/');
+            code = tmp[tmp.length-2];
+            if(!code){
+                return;
+            }
+            code = code.toLowerCase();
+        }
+        res.push({
+            name: t.text(),
+            code
+        });
+    });
+    return res;
+}
+
+export async function listv1(){
+    const txtraw = await axios.get('https://androidinvest.com/etf/');
+    const ls = convertInvestETF(txtraw.data);
+    return ls;
+}
+
+export async function list(){
+    const txtraw = await axios.get('https://xueqiu.com/service/v5/stock/screener/fund/list?type=18&parent_type=1&order=desc&order_by=percent&page=1&size=3000');
+    return txtraw.data.data.list;
+}
+
 export async function info(code:string){
     const txtraw = await axios.get(`http://quotes.money.163.com/fund/sgfl_${code.substr(2)}.html`)
     return convertinfo(txtraw.data);
@@ -40,7 +82,7 @@ export async function basic(code:string, type:'10yrs'|'5yrs'|'3yrs' = '3yrs'){
     })});
     
     const etf = eval(etfraw.data).map((el:any)=>{
-        return ({
+    return ({
         date: el.day,
         close: Number(el.close),
     })})
