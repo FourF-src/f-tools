@@ -1,8 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "start": "umi dev",
-    "build": "umi build",
+    "start": "node ./server/main.js",
+    "dev": "umi dev",
+    "build": "npm run build:api && umi build",
+    "build:api": "tsc --esModuleInterop ./api/*.ts --outDir ./server",
     "test": "umi test",
     "lint:es": "eslint --ext .js src mock tests",
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\"",
@@ -29,7 +31,6 @@
     "nodemon": "^2.0.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-
     "@types/jest": "^23.3.12",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
