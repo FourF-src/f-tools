@@ -2,24 +2,25 @@
   "private": true,
   "scripts": {
     "start": "node ./server/main.js",
-    "dev": "umi dev",
     "build": "npm run build:api && umi build",
     "build:api": "tsc --esModuleInterop ./api/*.ts --outDir ./server",
+    "build:image": "npm run build && docker build -t wanghsinche/qtrade:latest .",
     "test": "umi test",
     "lint:es": "eslint --ext .js src mock tests",
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\"",
     "precommit": "lint-staged",
     "api": "ts-node ./api/main.ts",
-    "api-dev": "nodemon -e ts -w ./api -x npm run api",
-    "build:image": "npm run build && docker -t wanghsinche/qtrade:latest ."
+    "dev": "umi dev",
+    "api-dev": "nodemon -e ts -w ./api -x npm run api"
   },
   "dependencies": {
     "axios": "^0.19.1",
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
     "memoize-one": "^5.1.1",
-    "uuid": "^3.3.3",
-    "express": "^4.17.1"
+    "moment": "^2.24.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@antv/data-set": "^0.10.2",

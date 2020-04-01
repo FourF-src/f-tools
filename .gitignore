@@ -21,3 +21,4 @@ secret.json
 today.yaml
 
 /server
+/dist
