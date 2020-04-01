@@ -70,7 +70,7 @@ export async function info(code:string){
     return convertinfo(txtraw.data);
 }
 
-export async function basic(code:string, type:'10yrs'|'5yrs'|'3yrs' = '3yrs'){
+export async function basic(code:string, type:'1yrs'|'5yrs'|'3yrs' = '3yrs'){
     const datalen = Math.max(Math.min(parseInt(type, 10) * 250, 10* 250), 250);
     const fundraw2 = await axios.get(`http://fund.eastmoney.com/pingzhongdata/${code.substr(2)}.js`)
     const etfraw = await axios.get(`http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?scale=240&ma=no&datalen=${datalen}&symbol=${code}`)

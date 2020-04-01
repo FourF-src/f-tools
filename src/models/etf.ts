@@ -29,7 +29,7 @@ interface State {
 export const namespace = 'etf';
 export const actions = {
   set: (state: Partial<State>) => createAction(`${namespace}/set`, state),
-  getBasic: (code: string, type:'3yrs'|'5yrs') => createAction(`${namespace}/getBasic`, {code, type}),
+  getBasic: (code: string, type:'1yrs'|'3yrs'|'5yrs') => createAction(`${namespace}/getBasic`, {code, type}),
   getInfo: (code: string) => createAction(`${namespace}/getInfo`, {code}),
   getList: () => createAction(`${namespace}/getList`),
 };

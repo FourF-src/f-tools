@@ -7,12 +7,12 @@ export default function () {
       <Card.Header
         title="ETFs"
         thumb="https://gw.alipayobjects.com/zos/rmsportal/MRhHctKOineMbKAZslML.jpg"
-        extra={<span>inspect ETFs</span>}
+        extra={<span>invest ETFs</span>}
       />
       <Card.Body>
-        <Link to="/etf">ETF's details</Link>
+        <Link to="/etf">ETF's chart and info </Link>
       </Card.Body>
-      <Card.Footer content="footer content" extra={<div>view detail</div>} />
+      <Card.Footer extra={<Link to="/etf">view detail</Link>} />
     </Card>
 
   </>

@@ -44,3 +44,16 @@ body {
   line-height: 30px;
   width: 100%;
 } 
+
+.radio .am-radio {
+  padding: 2.5px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  margin-right: 14px;
+}
+
+.radio .am-radio-inner:after {
+  right: 3px;
+  width: 4px;
+  height: 10px;
+}
