@@ -2,7 +2,8 @@ from mhart/alpine-node:10
 run apk add --no-cache git
 run git clone https://github.com/FourF-src/f-tools.git
 workdir f-tools
-run npm i && npm run build 
-run rm -fr node_modules
-run npm i --production
+add ./dist dist
+run npm install --production
+# run npm remove cache
+EXPOSE 9000
 CMD ["npm","run","api"] 

@@ -8,17 +8,19 @@
     "lint:ts": "tslint \"src/**/*.ts\" \"src/**/*.tsx\"",
     "precommit": "lint-staged",
     "api": "ts-node ./api/main.ts",
-    "api-dev": "nodemon -e ts -w ./api -x npm run api"
+    "api-dev": "nodemon -e ts -w ./api -x npm run api",
+    "build:image": "npm run build && docker -t wanghsinche/qtrade:latest ."
   },
   "dependencies": {
+  },
+  "devDependencies": {
     "axios": "^0.19.1",
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "memoize-one": "^5.1.1",
-    "uuid": "^3.3.3"
-  },
-  "devDependencies": {
+    "uuid": "^3.3.3",
+
     "@antv/data-set": "^0.10.2",
     "@antv/f2": "^3.6.3",
     "@types/express": "^4.17.2",
