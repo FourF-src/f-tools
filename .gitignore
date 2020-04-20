@@ -22,3 +22,6 @@ today.yaml
 
 /server
 /dist
+
+/venv
+*.pyc
