@@ -1,15 +1,17 @@
 import axios from 'axios';
 import {MongoClient} from 'mongodb';
-
+/**
+ * need envs MONGODBURL, DBNAME, PYURL
+ */
 const lastUpdateTime:Record<string, number> = {};
 const iterval = 60000;
 
-const url = 'mongodb://my_user:password123@34.80.33.204:3333/my_database';
+const url = process.env['MONGODBURL']||'mongodb://my_user:password123@34.80.33.204:3333/my_database';
 
-const dbName = 'my_database';
+const dbName = process.env['DBNAME']||'my_database';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 
-const pyurl = 'http://127.0.0.1:5000/httprpc'
+const pyurl = process.env['PYURL']||'http://127.0.0.1:5000/httprpc'
 
 function getPyURL(service:string){
     return pyurl + '/' + service;
