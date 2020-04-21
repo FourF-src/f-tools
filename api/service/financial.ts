@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {MongoClient} from 'mongodb';
 
-let lastUpdateTime = Date.now();
+const lastUpdateTime:Record<string, number> = {};
 const iterval = 60000;
 
 const url = 'mongodb://my_user:password123@34.80.33.204:3333/my_database';
@@ -24,6 +24,24 @@ async function fetchPyData(service:string, arg:any){
 }
 client.connect().then(_=>console.log('mongodb connected')).catch(e=>console.error(e));
 
+export async function hs300(){
+    let collection = client.db(dbName).collection('hs300');
+    if (!collection){
+        collection = await client.db(dbName).createCollection('hs300');
+    }
+    const cursor = collection.find({});
+    const res = await cursor.toArray();
+    const code = 'hs300';
+    if (res.length < 1 || Date.now()-lastUpdateTime[code] > iterval){
+        const pyres = await fetchPyData('hs300', {});
+        await collection.deleteMany({});
+        await collection.insertMany(pyres);
+        lastUpdateTime[code] = Date.now();
+        return pyres;
+    }
+    return res;
+}
+
 export async function profit(code:string, start:Date, end:Date){
     let collection = client.db(dbName).collection('profit');
     if (!collection){
@@ -35,7 +53,7 @@ export async function profit(code:string, start:Date, end:Date){
     const res = await cursor.toArray();
     
     
-    if (res.length < 1 || Date.now()-lastUpdateTime > iterval){
+    if (res.length < 1 || Date.now()-lastUpdateTime[code] > iterval){
         const pyres = await fetchPyData('profit', {
             code, start: start.getFullYear(), end: end.getFullYear()
         });
@@ -55,7 +73,7 @@ export async function profit(code:string, start:Date, end:Date){
         if(finalData.length > 0){
             await collection.insertMany(finalData);
         }
-        lastUpdateTime = Date.now();
+        lastUpdateTime[code] = Date.now();
 
         return pydata;
     }

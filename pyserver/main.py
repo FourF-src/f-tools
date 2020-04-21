@@ -1,10 +1,11 @@
 from flask import Flask, request, json, g
 import baostock as bs
 from profit import profit, operation
-
+from securitys import hs300
 services_func = {
     'profit': profit,
-    'operation': operation
+    'operation': operation,
+    'hs300': hs300
 }
 
 app = Flask(__name__)

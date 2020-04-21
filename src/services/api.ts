@@ -39,3 +39,18 @@ export async function etfInfo(code:string){
     })
     return res.data
 }
+
+export async function stockProfit(code:string){
+    const res = await request('/api/stock/profit', {
+        code,
+        start: "2007",
+        end: (new Date()).getFullYear()+''
+    })
+    return res.data
+}
+
+export async function hs300(){
+    const res = await request('/api/stock/hs300', {
+    })
+    return res.data
+}
