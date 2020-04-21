@@ -28,7 +28,7 @@ interface State {
 export const namespace = 'stock';
 export const actions = {
   set: (state: Partial<State>) => createAction(`${namespace}/set`, state),
-  getProfit: () => createAction(`${namespace}/getProfit`),
+  getProfit: (code:string) => createAction(`${namespace}/getProfit`, {code}),
   getHS300: () => createAction(`${namespace}/getHS300`),
 };
 const mm: Model<State> = {
