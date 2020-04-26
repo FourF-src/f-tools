@@ -3,6 +3,8 @@ import { IConfig } from 'umi-types';
 // ref: https://umijs.org/config/
 const config: IConfig =  {
   treeShaking: true,
+  publicPath: 'https://cdn.jsdelivr.net/gh/FourF-src/f-tools@master/dist/',
+  runtimePublicPath: true,
   proxy: {
     "/api": {
       target: "http://localhost:9000/",

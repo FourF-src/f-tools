@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "./script/start.sh",
+    "start": "node server/main.js",
     "build": "npm run build:api && umi build",
     "build:api": "tsc --esModuleInterop ./api/*.ts --outDir ./server",
     "build:image": "npm run build && docker build -t wanghsinche/qtrade:latest .",
