@@ -1,5 +1,9 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.7
+FROM python:3.6-alpine3.7
+RUN apk add --no-cache uwsgi-python3
 COPY ./app /app
 WORKDIR /app
 COPY requirements.txt ./
+COPY uwsgi.ini ./
 RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 3031
+CMD ['uwsgi','uwsgi.ini'] 
