@@ -6,12 +6,12 @@ import {MongoClient} from 'mongodb';
 const lastUpdateTime:Record<string, number> = {};
 const iterval = 60000;
 
-const url = process.env['MONGODBURL']||'mongodb://my_user:password123@34.80.33.204:3333/my_database';
-
+const url = process.env['MONGODBURL']||`mongodb+srv://financial:financial@cluster0-w3gtt.gcp.mongodb.net/test?retryWrites=true&w=majority`;
+ 
 const dbName = process.env['DBNAME']||'my_database';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 
-const pyurl = process.env['PYURL']||'http://127.0.0.1:5000/httprpc'
+const pyurl = process.env['PYURL']||'http://127.0.0.1:80/httprpc'
 
 function getPyURL(service:string){
     return pyurl + '/' + service;

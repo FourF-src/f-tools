@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+    qtrade:
+        image: wanghsinche/qtrade:v20200426
+        environment:
+            - MONGODBURL=mongodb+srv://financial:financial@cluster0-w3gtt.gcp.mongodb.net/test?retryWrites=true&w=majority
+            - PYURL=http://qtrade-pyserver/httprpc
+        networks:
+            - inner
+        restart: always
+
+    qtrade-pyserver:
+        image: wanghsinche/qtrade-pyserver
+        networks:
+            - inner
+        restart: always
+
+    v2ray:
+        image: v2ray/official
+        volumes:
+            - ./:/etc/v2ray/
+        networks:
+            - inner
+        restart: always
+
+    nginx:
+        image: bitnami/nginx
+        depends_on:
+            - v2ray
+            - qtrade
+            - qtrade-pyserver
+        networks:
+            - inner
+        ports:
+            - "80:8080"
+            - "443:8443"
+        volumes:
+            - "./app:/app"
+            - "./certs:/certs"
+            - "./nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro"
+        restart: always
+
+networks:
+    inner:
