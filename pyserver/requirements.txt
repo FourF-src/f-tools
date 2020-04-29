@@ -1,14 +1,1 @@
-astroid==2.2.5
 baostock==0.8.8
-isort==4.3.20
-lazy-object-proxy==1.4.1
-mccabe==0.6.1
-numpy==1.16.4
-pandas==0.24.2
-pylint==2.3.1
-python-dateutil==2.8.0
-pytz==2019.1
-rope==0.14.0
-six==1.12.0
-typed-ast==1.3.5
-wrapt==1.11.1
