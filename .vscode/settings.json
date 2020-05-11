@@ -1,4 +1,4 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
-    "python.pythonPath": "venv/bin/python3"
+    "python.pythonPath": "/Users/aligame/anaconda3/bin/python"
 }

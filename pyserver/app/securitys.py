@@ -1,10 +1,7 @@
-from flask import g
+import baostock as bs
 
 def hs300(arg):
-    bs = getattr(g, 'bsclient', None)
-    if not bs:
-        return
-
+    bs.login()
     res = []
     rs_profit = bs.query_hs300_stocks()
 
@@ -14,5 +11,5 @@ def hs300(arg):
             for idx, col in enumerate(rs_profit.fields):
                 obj[col] = d[idx]
             res.append(obj)
-
+    bs.logout()
     return res

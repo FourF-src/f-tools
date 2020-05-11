@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "node ./server/main.js",
+    "start": "node ./server/main.js & python pyserver/app/entry.py",
     "build": "npm run build:api && umi build",
     "build:api": "tsc --esModuleInterop ./api/*.ts --outDir ./server",
     "build:image": "npm run build && docker build -t wanghsinche/qtrade:latest .",
@@ -20,8 +20,10 @@
     "express": "^4.17.1",
     "memoize-one": "^5.1.1",
     "moment": "^2.24.0",
+    "mongodb": "^3.5.6",
+    "python-shell": "^2.0.0",
     "uuid": "^3.3.3",
-    "mongodb": "^3.5.6"
+    "zerorpc": "^0.9.8"
   },
   "devDependencies": {
     "@antv/data-set": "^0.10.2",

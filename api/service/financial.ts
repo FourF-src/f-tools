@@ -1,5 +1,5 @@
-import axios from 'axios';
 import {MongoClient} from 'mongodb';
+const zerorpc = require("zerorpc");
 /**
  * need envs MONGODBURL, DBNAME, PYURL
  */
@@ -11,18 +11,20 @@ const url = process.env['MONGODBURL']||`mongodb+srv://financial:financial@cluste
 const dbName = process.env['DBNAME']||'my_database';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 
-const pyurl = process.env['PYURL']||'http://127.0.0.1:80/httprpc'
+const pyurl = process.env['PYURL']||'tcp://0.0.0.0:4242'
+const rpcClient = new zerorpc.Client();
+rpcClient.connect(pyurl);
 
-function getPyURL(service:string){
-    return pyurl + '/' + service;
-}
-
-async function fetchPyData(service:string, arg:any){
-    const res = await axios.post(getPyURL(service), arg);
-    if (res.data.data){
-        return res.data.data
-    }
-    return []
+function fetchPyData(service:string, arg:any){
+    return new Promise<any>((resolve, rej)=>{
+        rpcClient.invoke(service, JSON.stringify(arg), function(error:Error, res:any) {
+            if (error){
+                rej(error);
+            } else {
+                resolve(res);
+            }
+        });
+    })   
 }
 client.connect().then(_=>console.log('mongodb connected')).catch(e=>console.error(e));
 

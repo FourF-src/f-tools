@@ -1,9 +1,7 @@
-from flask import g
+import baostock as bs
 
 def basic(arg, op):
-    bs = getattr(g, 'bsclient', None)
-    if not bs:
-        return
+    bs.login()
 
     code = arg['code']
     start = arg['start']
@@ -21,6 +19,7 @@ def basic(arg, op):
                 for idx, col in enumerate(rs_profit.fields):
                     obj[col] = rs_profit.data[0][idx]
                 res.append(obj)
+    bs.logout()
     return res
 
 
