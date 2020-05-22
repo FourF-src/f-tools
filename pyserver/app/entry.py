@@ -2,6 +2,7 @@ import zerorpc
 import os
 from profit import profit, operation
 from securitys import hs300
+from kdata import kdata
 import json
 # Set environment variables
 addr = getattr(os.environ, 'PYURL', 'tcp://0.0.0.0:4242') 
@@ -13,6 +14,8 @@ class HelloRPC(object):
         return operation(json.loads(arg))
     def hs300(self, arg):
         return hs300(json.loads(arg))
+    def kdata(self, arg):
+        return kdata(json.loads(arg))
 
 s = zerorpc.Server(HelloRPC())
 s.bind(addr)
