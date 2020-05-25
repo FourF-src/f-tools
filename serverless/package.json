@@ -12,7 +12,7 @@
     "@now/node": "^1.6.1"
   },
   "dependencies": {
-    "mongodb": "^3.5.7",
-    "node-dig-dns": "^0.2.10"
+    "axios": "^0.19.2",
+    "mongodb": "^3.5.7"
   }
 }
