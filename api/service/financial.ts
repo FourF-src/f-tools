@@ -5,7 +5,7 @@ const zerorpc = require("zerorpc");
 /**
  * need envs MONGODBURL, DBNAME, PYURL
  */
-const iterval = 600000;
+const iterval = 60 * 60 * 24;
 const url2 = `mongodb://financial:financial@cluster0-shard-00-00-w3gtt.gcp.mongodb.net:27017,cluster0-shard-00-01-w3gtt.gcp.mongodb.net:27017,cluster0-shard-00-02-w3gtt.gcp.mongodb.net:27017/my_database?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority`
 const url = process.env['MONGODBURL']||`mongodb+srv://financial:financial@cluster0-w3gtt.gcp.mongodb.net/test?retryWrites=true&w=majority`;
  
