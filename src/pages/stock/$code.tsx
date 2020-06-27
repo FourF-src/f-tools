@@ -22,6 +22,7 @@ const Index: React.FC<Props> = p => {
         return;
     }
     p.getProfit(code)
+    p.getKdata(code,  Date.now() - 1000*3600*24*90, Date.now());
 }, [code])
 
 

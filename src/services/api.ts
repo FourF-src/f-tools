@@ -54,3 +54,10 @@ export async function hs300(){
     })
     return res.data
 }
+
+export async function kdata(code:string, start:string, end:string){
+    const res = await request('/api/stock/kdata', {
+        code, start, end
+    })
+    return res.data
+}
